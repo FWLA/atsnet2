@@ -1,0 +1,23 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzCoreBundle #}
+
+<h3>ATS.net 2 Core</h3>
+<ul>
+	<li><a href="{{ path('default_home') }}">Home</a>
+	{% if is_granted('ROLE_CORE_MANAGER') %}
+	<li><a href="{{ path('user_index') }}">Benutzer</a>
+		<ul>
+			<li><a href="{{ path('user_index') }}">Liste</a>
+			<li><a href="{{ path('user_new') }}">Neu</a>
+		</ul>
+	{% endif %}
+	{% if is_granted('ROLE_CORE_ADMIN') %}
+	<li><a href="{{ path('organisation_index') }}">Organisationen</a>
+		<ul>
+			<li><a href="{{ path('organisation_index') }}">Liste</a>
+			<li><a href="{{ path('organisation_new') }}">Neu</a>
+		</ul>
+	{% endif %}
+	<li><a href="{{ path('myaccount_edit') }}">Mein Account</a>
+</ul>

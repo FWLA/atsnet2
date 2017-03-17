@@ -1,0 +1,14 @@
+/*
+ * author: Benjamin Ihrig
+ * system: ATS.net 2
+ * bundle: AtemschutzCoreBundle
+ */
+
+.ui-tooltip ul {
+	margin: 0;
+	padding: 0;
+}
+
+.ui-tooltip ul li {
+	list-style: none;
+}

@@ -1,0 +1,41 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:G26:base.html.twig' %}
+
+{% block title %}{{ parent() }} - Bearbeiten{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block moduleTitle %}G26 von "{{ g26.getAtemschutzgeraetetraeger() }}" vom {{ g26.getDateFormatted() }} bearbeiten{% endblock %}
+
+{% block moduleActions %}
+<ul class="inline">
+	<li><a href="{{ path('atemschutzgeraetetraeger_show', {'id': g26.getAtemschutzgeraetetraeger().getId(), '_format': 'html'}) }}">Abbrechen</a>
+</ul>
+{% endblock %}
+
+{% block moduleBody %}
+{% include 'AtemschutzNachweisBundle:G26:form.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript">
+	$(function() {
+		$( ".date" ).datepicker({
+			dateFormat: 'dd.mm.yy',
+			showOn: "both",
+			changeMonth: true,
+			changeYear: true,
+			buttonImage: "{{ asset('bundles/atemschutzcore/images/icons/16x16/calendar.png') }}",
+			buttonImageOnly: true,
+			showOtherMonths: true,
+			selectOtherMonths: true
+		});
+	});
+	</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+# author: Benjamin Ihrig
+# system: ATS.net 2
+# bundle: AtemschutzNachweisBundle
+
+atemschutzgeraetetraeger:
+  resource: "@AtemschutzNachweisBundle/Controller/AtemschutzgeraetetraegerController.php"
+  prefix: /nachweis/atemschutzgeraetetraeger
+  type: annotation
+  
+einsatzart:
+  resource: "@AtemschutzNachweisBundle/Controller/EinsatzartController.php"
+  prefix: /nachweis/einsatzart
+  type: annotation
+  
+g26:
+  resource: "@AtemschutzNachweisBundle/Controller/G26Controller.php"
+  prefix: /nachweis/g26
+  type: annotation
+  
+nachweis:
+  resource: "@AtemschutzNachweisBundle/Controller/NachweisController.php"
+  prefix: /nachweis/nachweis
+  type: annotation
+  
+nachweisart:
+  resource: "@AtemschutzNachweisBundle/Controller/NachweisartController.php"
+  prefix: /nachweis/nachweisart
+  type: annotation
+  
+report:
+  resource: "@AtemschutzNachweisBundle/Controller/ReportController.php"
+  prefix: /nachweis/report
+  type: annotation

@@ -1,0 +1,27 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Einsatzart:base.html.twig' %}
+
+{% block title %}{{ parent() }} - Neu{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block moduleTitle %}Neue Einsatzart{% endblock %}
+
+{% block moduleActions %}
+<ul class="inline">
+	<li><a href="{{ path('einsatzart_index') }}">Abbrechen</a>
+</ul>
+{% endblock %}
+
+{% block moduleBody %}
+{% include 'AtemschutzNachweisBundle:Einsatzart:form.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

@@ -1,0 +1,25 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzCoreBundle::base.html.twig' %}
+
+{% block title %}{{ parent() }} - Statistik{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block bundleBody %}
+<h2>Statistik</h2>
+
+<h3>{% block moduleTitle %}{% endblock %}</h3>
+
+{% block moduleActions %}{% endblock %}
+
+{% block moduleBody %}{% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

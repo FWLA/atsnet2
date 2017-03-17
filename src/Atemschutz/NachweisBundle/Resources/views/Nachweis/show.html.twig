@@ -1,0 +1,125 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Nachweis:base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutzcore/css/tablesorter/style.css'
+		filter='cssrewrite'
+	%}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}{{ nachweis }}{% endblock %}
+
+{% block moduleActions %}
+<ul class="inline">
+	<li><a href="{{ path('atemschutzgeraetetraeger_show', {'id': nachweis.getAtemschutzgeraetetraeger().getId(), '_format': 'html'}) }}">Zurück</a>
+	<li><a href="{{ path('nachweis_show', {'id': nachweis.getId(), '_format': 'pdf'}) }}"><img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/pdf.png') }}" alt="PDF" />PDF Export</a>
+</ul>
+{% endblock %}
+
+{% block moduleBody %}
+<div id="nachweis_accordion">
+	<h3>Basisdaten</h3>
+	<div>
+		<table>
+			<tbody>
+				<tr>
+					<th>Datum
+					<td>{{ nachweis.getDateFormatted() }}
+				<tr>
+					<th>Ort
+					<td>{{ nachweis.getLocation() }}
+				<tr>
+					<th>Nachweisart
+					<td>{{ nachweis.getNachweisart() }}
+				<tr>
+					<th>Tätigkeit
+					<td>{{ nachweis.getWork() }}
+				<tr>
+					<th>Einsatzzeit
+					<td>{{ nachweis.getTime() }} min
+				<tr>
+					<th>Einsatzart
+					<td>{{ nachweis.getEinsatzart() }}
+				<tr>
+					<th>Einsatznummer
+					<td>{{ nachweis.getEinsatzNummer() }}
+		</table>
+	</div>
+	<h3>Weitere Atemschutzgeräteträger ({{ otherNachweise|length }})</h3>
+	<div>
+		{% if(otherNachweise|length > 0) %}
+		<table id="other_nachweise" class="tablesorter">
+			<thead>
+				<tr>
+					<th>Atemschutzgeräteträger<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>Nachweisart<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>Tätigkeit<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>Einsatzzeit<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					{% if is_granted('ROLE_NACHWEIS_MANAGER') %}
+					<th>
+					{% endif %}
+			<tbody>
+				{% for otherNachweis in otherNachweise %}
+				<tr>
+					<td>{{ otherNachweis.getAtemschutzgeraetetraeger() }}
+					<td>{{ otherNachweis.getNachweisart() }}
+					<td>{{ otherNachweis.getWork() }}
+					<td>{{ otherNachweis.getTime() }} min
+					{% if is_granted('ROLE_NACHWEIS_MANAGER') %}
+					<td>
+						<ul class="action_menu">
+							<li>
+								<a href="#">
+									<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/gear.png') }}" alt="Optionen" />
+									<div class="clear"></div>
+								</a>
+								<ul>
+									<li>
+										<a href="{{ path('atemschutzgeraetetraeger_show', {'id': otherNachweis.getAtemschutzgeraetetraeger().getId(), '_format': 'html'}) }}">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/user.png') }}" alt="Atemschutzgeräteträger anzeigen" />
+											<div class="clear"></div>
+										</a>
+									<li>
+										<a href="{{ path('nachweis_show', {'id': otherNachweis.getId(), '_format': 'html'}) }}">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/search.png') }}" alt="Nachweis anzeigen" />
+											<div class="clear"></div>
+										</a>
+									<li>
+										<a href="{{ path('nachweis_edit', {'id': otherNachweis.getId()}) }}">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/edit.png') }}" alt="Anzeigen" />
+											<div class="clear"></div>
+										</a>
+									<li>
+										<a class="delete_nachweis" href="{{ path('nachweis_delete', {'id': otherNachweis.getId()}) }}">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Anzeigen" />
+											<div class="clear"></div>
+										</a>
+					{% endif %}
+				{% endfor %}
+		</table>
+		<em>{{ otherNachweise|length }} {% if otherNachweise|length == 1 %}Eintrag{% else %}Einträge{% endif %}</em>
+		{% else %}
+		<em>Keine weiteren Atemschutzgeräteträger.</em>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts
+		'bundles/atemschutzcore/js/jquery.tablesorter.min.js'
+		'bundles/atemschutznachweis/js/nachweis.show.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}

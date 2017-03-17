@@ -1,0 +1,26 @@
+/*
+ * author: Benjamin Ihrig
+ * system: ATS.net 2
+ * bundle: AtemschutzNachweisBundle
+ */
+
+#bulkTable {
+	margin: 0;
+}
+
+#bulkTable td, #bulkTable th {
+	border: none;
+}
+
+#bulkTable th {
+	padding: 2px 5px;
+	vertical-align: top;
+}
+
+#bulkTable td {
+	padding: 2px 2px;
+}
+
+th#atsgt_th {
+	vertical-align: top;
+}

@@ -1,0 +1,6 @@
+parameters:
+    role_manager.class: Atemschutz\CoreBundle\Security\RoleManager
+
+services:
+    role_manager:
+        class: "%role_manager.class%"

@@ -1,0 +1,44 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% if app.user.getAtemschutzgeraetetraeger() != null or is_granted('ROLE_NACHWEIS_VIEWER') %}
+<h3>Atemschutznachweis</h3>
+<ul>
+	{% if app.user.getAtemschutzgeraetetraeger() != null %}
+	<li><a href="{{ path('atemschutzgeraetetraeger_showMy') }}">Mein Nachweis</a>
+	{% endif %}
+	{% if is_granted('ROLE_NACHWEIS_MANAGER') %}
+	<li><a href="{{ path('nachweis_bulk') }}">Nachweise Eintragen</a>
+	{% endif %}
+	{% if is_granted('ROLE_NACHWEIS_VIEWER') %}
+	<li><a href="{{ path('atemschutzgeraetetraeger_report', {'_format': 'html'}) }}">Atemschutzgeräteträger</a>
+		{% if is_granted('ROLE_NACHWEIS_MANAGER') %}
+		<ul>
+			<li>
+				<a href="{{ path('atemschutzgeraetetraeger_index') }}">Liste</a>
+			<li>
+				<a href="{{ path('atemschutzgeraetetraeger_new') }}">Neu</a>
+		</ul>
+		{% endif %}
+	<li><a href="">Berichte</a>
+		<ul>
+			<li><a id="menu_report_nachweis" href="{{ path('report_search_nachweis') }}">Einsatz</a>
+			<li><a id="menu_report_year" href="{{ path('report_select_year') }}">Jahresstatistik</a>
+			<li><a href="{{ path('atemschutzgeraetetraeger_report', {'_format': 'pdf'}) }}">Übersicht</a>
+		</ul>
+	{% endif %}
+	{% if is_granted('ROLE_NACHWEIS_ADMIN') %}
+	<li><a href="{{ path('nachweisart_index') }}">Nachweisarten</a>
+		<ul>
+			<li><a href="{{ path('nachweisart_index') }}">Liste</a>
+			<li><a href="{{ path('nachweisart_new') }}">Neu</a>
+		</ul>
+	<li><a href="{{ path('einsatzart_index') }}">Einsatzarten</a>
+		<ul>
+			<li><a href="{{ path('einsatzart_index') }}">Liste</a>
+			<li><a href="{{ path('einsatzart_new') }}">Neu</a>
+		</ul>
+	{% endif %}
+</ul>
+{% endif %}

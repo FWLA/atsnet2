@@ -1,0 +1,27 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzCoreBundle #}
+
+{% extends 'AtemschutzCoreBundle:Organisation:base.html.twig' %}
+
+{% block title %}{{ parent() }} - Neu{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block moduleTitle %}Neue Organisation{% endblock %}
+
+{% block moduleActions %}
+<ul class="inline">
+	<li><a href="{{ path('organisation_index') }}">Abbrechen</a>
+</ul>
+{% endblock %}
+
+{% block moduleBody %}
+{% include 'AtemschutzCoreBundle:Organisation:form.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

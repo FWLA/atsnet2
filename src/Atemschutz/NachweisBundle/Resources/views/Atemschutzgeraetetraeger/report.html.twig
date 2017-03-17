@@ -1,0 +1,68 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Atemschutzgeraetetraeger:base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutznachweis/css/atemschutzgeraetetraeger.report.css'
+		filter='cssrewrite'
+	%}
+	<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}Übersicht{% endblock %}
+
+{% block moduleActions %}
+<ul class="inline">
+	<li><a href="{{ path('atemschutzgeraetetraeger_report', {'_format': 'pdf'}) }}"><img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/pdf.png') }}" alt="PDF" />PDF Export</a>
+</ul>
+{% endblock %}
+
+{% block moduleBody %}
+
+{% if tauglich0|length == 0 and tauglich1|length == 0 and tauglich2|length == 0 %}
+<em>Keine Einträge gefunden.</em>
+{% else %}
+<table id="report">
+	<thead>
+		<tr>
+			<th class="untauglich">Untauglich
+			<th class="tauglich">Tauglich ATS 1
+			<th class="tauglich">Tauglich ATS 2 (CSA)
+		<tr>
+			<th class="count untauglich">{{ tauglich0|length }}
+			<th class="count tauglich">{{ tauglich1|length }}
+			<th class="count tauglich">{{ tauglich2|length }}
+	<tbody>
+		<tr>
+			<td class="untauglich">
+				<ul>
+					{% for atemschutzgeraetetraeger in tauglich0 %}
+					<li><a href="{{ path('atemschutzgeraetetraeger_show', {'id': atemschutzgeraetetraeger.getId(), '_format': 'html'}) }}">{{ atemschutzgeraetetraeger }}
+					{% endfor %}
+				</ul>
+			<td class="tauglich">
+				<ul>
+					{% for atemschutzgeraetetraeger in tauglich1 %}
+					<li><a href="{{ path('atemschutzgeraetetraeger_show', {'id': atemschutzgeraetetraeger.getId(), '_format': 'html'}) }}">{{ atemschutzgeraetetraeger }}
+					{% endfor %}
+				</ul>
+			<td class="tauglich">
+				<ul>
+					{% for atemschutzgeraetetraeger in tauglich2 %}
+					<li><a href="{{ path('atemschutzgeraetetraeger_show', {'id': atemschutzgeraetetraeger.getId(), '_format': 'html'}) }}">{{ atemschutzgeraetetraeger }}
+					{% endfor %}
+				</ul>
+</table>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

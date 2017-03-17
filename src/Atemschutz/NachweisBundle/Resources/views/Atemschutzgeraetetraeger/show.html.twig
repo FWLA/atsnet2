@@ -1,0 +1,269 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Atemschutzgeraetetraeger:base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutzcore/css/tablesorter/style.css'
+		filter='cssrewrite'
+	%}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}{{ atemschutzgeraetetraeger }}{% endblock %}
+
+{% block moduleActions %}
+{% if is_granted('ROLE_NACHWEIS_MANAGER') %}
+<ul class="inline">
+	<li><a href="{{ path('atemschutzgeraetetraeger_edit', {'id': atemschutzgeraetetraeger.getId()}) }}">Bearbeiten</a>
+	{% if atemschutzgeraetetraeger.getUser() == null %}
+	<li><a href="{{ path('user_new_atsgt', {'id': atemschutzgeraetetraeger.getId()}) }}">Login erzeugen</a>
+	{% else %}
+	<li><a href="{{ path('user_edit', {'id': atemschutzgeraetetraeger.getUser().getId()}) }}">Login bearbeiten</a>
+	{% endif %}
+	<li><a href="{{ path('g26_new', {'atemschutzgeraetetraegerId': atemschutzgeraetetraeger.getId()}) }}">Neue G26</a>
+	<li><a href="{{ path('nachweis_new', {'atemschutzgeraetetraegerId': atemschutzgeraetetraeger.getId()}) }}">Neuer Nachweis</a>
+	<li><a href="{{ path('atemschutzgeraetetraeger_show', {'id': atemschutzgeraetetraeger.getId(), '_format': 'pdf'}) }}"><img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/pdf.png') }}" alt="PDF" />PDF Export</a>
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block moduleBody %}
+
+<div id="atemschutzgeraetetraeger_accordion">
+	<h3>Persönliche Daten</h3>
+	<div>
+		<table>
+			<tbody>
+				<tr>
+					<th>Name
+					<td>{{ atemschutzgeraetetraeger.getFirstname() }} {{ atemschutzgeraetetraeger.getLastname() }}
+				<tr>
+					<th>Geburtsdatum
+					<td>{{ atemschutzgeraetetraeger.getBirthdateFormatted() }}
+				<tr>
+					<th>Organisation
+					<td>{{ atemschutzgeraetetraeger.getOrganisation() }}
+		</table>
+	</div>
+	
+	<h3>Atemschutz Daten</h3>
+	<div>
+		<h4>Lehrgänge</h4>
+		<table>
+			<tbody>
+				<tr>
+					<td>{% if atemschutzgeraetetraeger.getAts1() != null %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/32x32/tick.png') }}" alt="Ja" />
+						{% else %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/32x32/delete.png') }}" alt="Nein" />
+						{% endif %}
+					<th>Atemschutzgeräteträgerlehrgang 1
+					<td>{% if atemschutzgeraetetraeger.getAts1() == null %}
+						<em>Nicht vorhanden</em>
+						{% else %}
+						{{ atemschutzgeraetetraeger.getAts1Formatted() }}
+						{% endif %}
+				<tr>
+					<td>{% if atemschutzgeraetetraeger.getAts2() != null %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/32x32/tick.png') }}" alt="Ja" />
+						{% else %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/32x32/delete.png') }}" alt="Nein" />
+						{% endif %}
+					<th>Atemschutzgeräteträgerlehrgang 2 (CSA)
+					<td>{% if atemschutzgeraetetraeger.getAts2() == null %}
+					<em>Nicht vorhanden</em>
+					{% else %}
+					{{ atemschutzgeraetetraeger.getAts2Formatted() }}
+					{% endif %}
+		</table>
+		
+		{% if ((atemschutzgeraetetraeger.getAts1() != null) and (info.getRequiredsForAts1()|length > 0 or info.getRequiredsForAts2()|length > 0)) %}
+			<h4>Aktuelle Nachweise</h4>
+			
+			{% if info.getRequiredsForAts1()|length > 0 %}
+				<h5>Atemschutz 1</h5>
+				<table>
+					<tbody>
+						{% for nachweisinfo in info.getRequiredsForAts1() %}
+						<tr>
+							<td>{% if nachweisinfo.getNachweis() != null and nachweisinfo.getNachweis().isValid() %}
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/32x32/tick.png') }}" alt="Ja" />
+								{% else %}
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/32x32/delete.png') }}" alt="Nein" />
+								{% endif %}
+							<th>{{ nachweisinfo.getNachweisart() }}
+							<td>{% if nachweisinfo.getNachweis() != null %}
+								{{ nachweisinfo.getNachweis().getDateFormatted() }}
+								{% else %}
+								Nicht erbracht.
+								{% endif %}
+						{% endfor %}
+				</table>
+			{% endif %}
+			{% if (atemschutzgeraetetraeger.getAts2() != null and info.getRequiredsForAts2() > 0) %}
+				<h5>Atemschutz 2 (CSA)</h5>
+				<table>
+					<tbody>
+						{% for nachweisinfo in info.getRequiredsForAts2() %}
+						<tr>
+							<td>{% if nachweisinfo.getNachweis() != null and nachweisinfo.getNachweis().isValid() %}
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/32x32/tick.png') }}" alt="Ja" />
+								{% else %}
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/32x32/delete.png') }}" alt="Nein" />
+								{% endif %}
+							<th>{{ nachweisinfo.getNachweisart() }}
+							<td>{% if nachweisinfo.getNachweis() != null %}
+								{{ nachweisinfo.getNachweis().getDateFormatted() }}
+								{% else %}
+								Nicht erbracht.
+								{% endif %}
+						{% endfor %}
+				</table>
+			{% endif %}
+		{% endif %}
+	</div>
+	
+	<h3>Untersuchungen nach G26</h3>
+	<div>
+		{% if atemschutzgeraetetraeger.getG26s()|length == 0 %}
+		<em>Keine Einträge vorhanden.</em>
+		{% else %}
+		<table id="g26_table" class="tablesorter">
+			<thead>
+				<tr>
+					<th>
+					<th>Klasse<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>Datum<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>Gültig bis<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>Bemerkungen
+					{% if is_granted('ROLE_NACHWEIS_MANAGER') %}
+					<th>
+					{% endif %}
+			<tbody>
+			{% for g26 in atemschutzgeraetetraeger.getG26s() %}
+				<tr>
+					<td>{% if g26.isInvalid() %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Nein" />
+						{% else %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/tick.png') }}" alt="Ja" />
+						{% endif %}
+					<td>G26.{{ g26.getClassification() }}
+					<td>{{ g26.getDateFormatted() }}
+					<td>{{ g26.getDueDateFormatted() }}
+					<td>{{ g26.getNotice() }}
+					{% if is_granted('ROLE_NACHWEIS_MANAGER') %}
+					<td>
+						<ul class="action_menu">
+							<li>
+								<a href="#">
+									<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/gear.png') }}" alt="Optionen" />
+									<div class="clear"></div>
+								</a>
+								<ul>
+									{% if g26.getValid() %}
+									<li>
+										<a class="void_g26" href="{{ path('g26_void', {'id': g26.getId()}) }}" title="G26 ungültig machen">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/block.png') }}" alt="Ungültig machen" />
+											<div class="clear"></div>
+										</a>
+									{% endif %}
+									<li>
+										<a href="{{ path('g26_edit', {'id': g26.getId()}) }}" title="G26 bearbeiten">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/edit.png') }}" alt="Bearbeiten" />
+											<div class="clear"></div>
+										</a>
+									{% if is_granted('ROLE_NACHWEIS_ADMIN') %}
+									<li>
+										<a class="delete_g26" href="{{ path('g26_delete', {'id': g26.getId()}) }}" title="G26 löschen">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Löschen" />
+											<div class="clear"></div>
+										</a>
+									{% endif %}
+								</ul>
+						</ul>
+					{% endif %}
+			{% endfor %}
+		</table>
+		<em>{{ atemschutzgeraetetraeger.getG26s()|length }} {% if atemschutzgeraetetraeger.getG26s()|length == 1 %}Eintrag{% else %}Einträge{% endif %}</em>
+		{% endif %}
+	</div>
+	
+	<h3>Atemschutznachweise</h3>
+	<div>
+		{% if atemschutzgeraetetraeger.getNachweise()|length == 0 %}
+		<em>Keine Einträge vorhanden.</em>
+		{% else %}
+		<table id="nachweis_table" class="tablesorter">
+			<thead>
+				<tr>
+					<th>Datum<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>Nachweisart<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>Ort<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>Dauer<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+					<th>
+			<tbody>
+			{% for nachweis in atemschutzgeraetetraeger.getNachweise() %}
+				<tr>
+					<td>{{ nachweis.getDateFormatted() }}
+					<td>{{ nachweis.getNachweisart() }}
+					<td>{{ nachweis.getLocation() }}
+					<td>{{ nachweis.getTime() }}
+					<td>
+						<ul class="action_menu">
+							<li>
+								<a href="#">
+									<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/gear.png') }}" alt="Optionen" />
+									<div class="clear"></div>
+								</a>
+								<ul>
+									<li>
+										<a href="{{ path('nachweis_show', {'id': nachweis.getId(), '_format': 'html'}) }}" title="Nachweis anzeigen">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/search.png') }}" alt="Anzeigen" />
+											<div class="clear"></div>
+										</a>
+									
+									<li>
+										<a href="{{ path('nachweis_show', {'id': nachweis.getId(), '_format': 'pdf'}) }}" title="Nachweis Exportieren">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/pdf.png') }}" alt="Anzeigen" />
+											<div class="clear"></div>
+										</a>
+									{% if is_granted('ROLE_NACHWEIS_MANAGER') %}
+									<li>
+										<a href="{{ path('nachweis_edit', {'id': nachweis.getId()}) }}" title="Nachweis bearbeiten">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/edit.png') }}" alt="Bearbeiten" />
+											<div class="clear"></div>
+										</a>
+									{% endif %}
+									{% if is_granted('ROLE_NACHWEIS_ADMIN') %}
+									<li>
+										<a class="delete_nachweis" href="{{ path('nachweis_delete', {'id': nachweis.getId()}) }}" title="Nachweis löschen">
+											<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Löschen" />
+											<div class="clear"></div>
+										</a>
+									{% endif %}
+								</ul>
+						</ul>
+			{% endfor %}
+		</table>
+		<em>{{ atemschutzgeraetetraeger.getNachweise()|length }} {% if atemschutzgeraetetraeger.getNachweise()|length == 1 %}Eintrag{% else %}Einträge{% endif %}</em>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts
+		'bundles/atemschutzcore/js/jquery.tablesorter.min.js'
+		'bundles/atemschutznachweis/js/atemschutzgeraetetraeger.show.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}

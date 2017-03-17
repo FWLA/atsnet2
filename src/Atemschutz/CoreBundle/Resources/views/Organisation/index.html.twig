@@ -1,0 +1,78 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzCoreBundle #}
+
+{% extends 'AtemschutzCoreBundle:Organisation:base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutzcore/css/tablesorter/style.css'
+		filter='cssrewrite'
+	%}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}Übersicht{% endblock %}
+
+{% block moduleBody %}
+
+{% if organisations|length == 0 %}
+<em>Keine Organisationen angelegt.</em>
+{% else %}
+<table id="organisation_table" class="tablesorter">
+	<thead>
+		<tr>
+			<th>Name<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Adresse<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Adresszusatz<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>PLZ<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Ort<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Telefon<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>
+	<tbody>
+		{% for organisation in organisations %}
+		<tr>
+			<td>{{ organisation.getName() }}
+			<td>{{ organisation.getAddress1() }}
+			<td>{{ organisation.getAddress2() }}
+			<td>{{ organisation.getPLZ() }}
+			<td>{{ organisation.getOrt() }}
+			<td>{{ organisation.getTelefon() }}
+			<td>
+				<ul class="action_menu">
+					<li>
+						<a href="#">
+							<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/gear.png') }}" alt="Optionen" />
+							<div class="clear"></div>
+						</a>
+					<ul>
+						<li>
+							<a href="{{ path('organisation_edit', {'id': organisation.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/edit.png') }}" alt="Bearbeiten" />
+								<div class="clear"></div>
+							</a>
+						<li>
+							<a class="delete" href="{{ path('organisation_delete', {'id': organisation.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Löschen" />
+								<div class="clear"></div>
+							</a>
+					</ul>
+				</ul>
+		{% endfor %}
+</table>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts
+		'bundles/atemschutzcore/js/jquery.tablesorter.min.js'
+		'bundles/atemschutzcore/js/organisation.index.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}

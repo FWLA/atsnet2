@@ -1,0 +1,68 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Einsatzart:base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutzcore/css/tablesorter/style.css'
+		filter='cssrewrite'
+	%}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}Übersicht{% endblock %}
+
+{% block moduleBody %}
+
+{% if einsatzarts|length == 0 %}
+<em>Keine Einsatzarten angelegt.</em>
+{% else %}
+<table id="einsatzart_table" class="tablesorter">
+	<thead>
+		<tr>
+			<th>Name<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>
+	<tbody>
+		{% for einsatzart in einsatzarts %}
+		<tr>
+			<td>{{ einsatzart.getName() }}
+			<td>
+				<ul class="action_menu">
+					<li>
+						<a href="#">
+							<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/gear.png') }}" alt="Optionen" />
+							<div class="clear"></div>
+						</a>
+					<ul>
+						<li>
+							<a href="{{ path('einsatzart_edit', {'id': einsatzart.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/edit.png') }}" alt="Bearbeiten" />
+								<div class="clear"></div>
+							</a>
+						<li>
+							<a class="delete" href="{{ path('einsatzart_delete', {'id': einsatzart.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Löschen" />
+								<div class="clear"></div>
+							</a>
+					</ul>
+				</ul>
+		{% endfor %}
+</table>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts
+		'bundles/atemschutzcore/js/jquery.tablesorter.min.js'
+		'bundles/atemschutznachweis/js/einsatzart.index.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}

@@ -1,0 +1,31 @@
+# author: Benjamin Ihrig
+# system: ATS.net 2
+# bundle: AtemschutzNachweisBundle
+
+parameters:
+  tauglichkeit.class: 'Atemschutz\NachweisBundle\Tauglichkeit\Tauglichkeit'
+  statistik.class: 'Atemschutz\NachweisBundle\Statistik\Statistik'
+  nachweis.pdf.class: 'Atemschutz\NachweisBundle\Pdf\NachweisPdf'
+  report.pdf.class: 'Atemschutz\NachweisBundle\Pdf\ReportPdf'
+  year.pdf.class: 'Atemschutz\NachweisBundle\Pdf\YearPdf'
+  atemschutzgeraetetraeger.pdf.class: 'Atemschutz\NachweisBundle\Pdf\AtemschutzgeraetetraegerPdf'
+
+services:
+  tauglichkeit:
+    class: "%tauglichkeit.class%"
+    arguments: [ '@doctrine' ]
+  statistik:
+    class: "%statistik.class%"
+    arguments: [ '@doctrine' ]
+  atemschutzgeraetetraeger.pdf:
+    class: "%atemschutzgeraetetraeger.pdf.class%"
+    arguments: [ '@tauglichkeit', '@security.context' ]
+  nachweis.pdf:
+    class: "%nachweis.pdf.class%"
+    arguments: [ '@security.context', '@doctrine' ]
+  report.pdf:
+    class: "%report.pdf.class%"
+    arguments: [ '@security.context', '@doctrine', '@tauglichkeit' ]
+  year.pdf:
+    class: "%year.pdf.class%"
+    arguments: [ '@security.context' ]

@@ -1,0 +1,14 @@
+{% for flashMessage in app.session.flashbag.get('error') %}
+<div class="flash flash-error ui-widget">
+	<div class="ui-state-error ui-corner-all">
+		<p><span class="ui-icon ui-icon-info"></span>{{ flashMessage }}</p>
+	</div>
+</div>
+{% endfor %}
+{% for flashMessage in app.session.flashbag.get('notice') %}
+<div class="flash flash-notice ui-widget">
+	<div class="ui-state-highlight ui-corner-all">
+		<p><span class="ui-icon ui-icon-alert"></span>{{ flashMessage }}</p>
+	</div>
+</div>
+{% endfor %}

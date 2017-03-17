@@ -1,0 +1,70 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Report:base.html.twig' %}
+
+{% block title %}{{ parent() }} - Jahresstatistik {{ jahresstatistik.getJahr() }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutznachweis/css/statistik.year.css'
+		filter='cssrewrite'
+	%}
+	<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}Jahresstatistik {{ jahresstatistik.getJahr() }}{% endblock %}
+
+{% block moduleActions %}
+<ul class="inline">
+	<li><a href="{{ path('report_year', {'year': jahresstatistik.getJahr(), '_format': 'pdf'}) }}"><img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/pdf.png') }}" alt="" />PDF Export</a>
+</ul>
+{% endblock %}
+
+{% block moduleBody %}
+
+<h3>Lehrgänge</h3>
+<table>
+	<tbody>
+		<tr>
+			<th>Atemschutzgeräteträgerlehrgang I:
+			<td>{{ jahresstatistik.getLehrgaengeAts1() }}
+		<tr>
+			<th>Atemschutzgeräteträgerlehrgang II (CSA):
+			<td>{{ jahresstatistik.getLehrgaengeAts2() }}
+</table>
+
+<h3>Untersuchungen nach G26</h3>
+<table>
+	<tbody>
+		<tr>
+			<th>Gerätegruppe 1
+			<td>{{ jahresstatistik.getG26_1() }}
+		<tr>
+			<th>Gerätegruppe 2
+			<td>{{ jahresstatistik.getG26_2() }}
+		<tr>
+			<th>Gerätegruppe 3
+			<td>{{ jahresstatistik.getG26_3() }}
+</table>
+
+<h3>Erbrachte Nachweise</h3>
+<table>
+	<tbody>
+		{% for nachweis, anzahl in jahresstatistik.getNachweise() %}
+		<tr>
+			<th>{{ nachweis }}
+			<td>{{ anzahl }}
+		{% endfor %}
+</table>
+
+<h3>Gesamtzeit unter Atemschutz</h3>
+{{ jahresstatistik.getMinutenAts() }} Minuten = {{ jahresstatistik.getStundenAts() }} Stunden
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

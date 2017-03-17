@@ -1,0 +1,12 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzCoreBundle #}
+
+{% block form_row %}
+{% spaceless %}
+	<tr>
+		<th>{{ form_label(form) }}
+		<td>{{ form_widget(form) }}
+			<span class="form_error">{{ form_errors(form) }}</span>
+{% endspaceless %}
+{% endblock form_row %}

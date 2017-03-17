@@ -1,0 +1,33 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzCoreBundle #}
+
+{% extends 'AtemschutzCoreBundle::base.html.twig' %}
+
+{% block title %}{{ parent() }} - Benutzer{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block bundleBody %}
+<h2>Benutzer</h2>
+
+<div class="accordion">
+	<h3>{% block moduleTitle %}{% endblock %}</h3>
+	
+	<div>
+	{% block moduleActions %}
+	<ul class="inline">
+		<li><a href="{{ path('user_new') }}">Neuer Benutzer</a>
+	</ul>
+	{% endblock %}
+	
+	{% block moduleBody %}{% endblock %}
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

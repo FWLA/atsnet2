@@ -1,0 +1,135 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Nachweis:base.html.twig' %}
+
+{% form_theme form 'AtemschutzCoreBundle:Form:fields.html.twig' %}
+
+{% block title %}{{ parent() }} - Neu{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutznachweis/css/nachweis.bulk.css'
+		filter='cssrewrite'
+	%}
+	<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}Neue Nachweise{% endblock %}
+
+{% block moduleActions %}{% endblock %}
+
+{% block moduleBody %}
+<form action="" method="post" {{ form_enctype(form) }}>
+	<table>
+	{{ form_widget(form) }}
+	<tr>
+		<th id="atsgt_th">Atemschutzgeräteträger
+		<td>
+			<table id="bulkTable">
+				<thead>
+					<tr>
+						<th>Atemschutzgeräteträger
+						<th>Einsatzzeit
+						<th>Tätigkeit
+				<tbody id="atemschutzgeraetetraegers">
+					<tr id="entry">
+						<td>
+							<select id="select" name="atemschutzgeraetetraegers[]" onBlur="newSelect(this)">
+								<option value="0">Auswählen...
+								{% for atemschutzgeraetetraeger in atemschutzgeraetetraegers %}
+								<option value="{{ atemschutzgeraetetraeger.getId() }}">{{ atemschutzgeraetetraeger }}
+								{% endfor %}
+							</select>
+						<td><input id="times" type="number" name="times[]" />
+						<td><input id="work" class="work" type="text" name="work[]" />
+			</table>
+	</table>
+	<input type="submit" value="Nachweis Speichern" />
+</form>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript">
+	$(function() {
+		$( ".date" ).datepicker({
+			dateFormat: 'dd.mm.yy',
+			showOn: "both",
+			changeMonth: true,
+			changeYear: true,
+			buttonImage: "{{ asset('bundles/atemschutzcore/images/icons/16x16/calendar.png') }}",
+			buttonImageOnly: true,
+			showOtherMonths: true,
+			selectOtherMonths: true
+		});
+	});
+
+	$(function() {
+		$.ajax({
+			url: "{{ path('nachweis_used_locations') }}",
+			dataType: "json",
+			success: function( jsonResponse ) {
+				var data = [];
+				$.each(jsonResponse, function (key, value) {
+					data.push(value);
+				});
+
+				$( '.location' ).autocomplete({
+					source: data,
+					minLength: 2
+				});
+			}
+		});
+	});
+
+	//$(function() {
+	//	$.ajax({
+	//		url: "{{ path('nachweis_used_work') }}",
+	//		dataType: "json",
+	//		error: function(jqXHR, text, error) {
+	//			alert(text);
+	//		},
+	//		success: function( jsonResponse ) {
+	//			alert('HI');
+	//			var data = [];
+	//			$.each(jsonResponse, function (key, value) {
+	//				data.push(value);
+	//			});
+	//
+	//			$( '.work' ).autocomplete({
+	//				source: data,
+	//				minLength: 2
+	//			});
+	//		}
+	//	});
+	//});
+	
+	function newSelect(field) {
+		if(field.value == 0) {
+	        return; // Kein neues Feld erzeugen bei keiner Auswahl
+	    } else {
+			var tbody = $( "#atemschutzgeraetetraegers" );
+			var select = $( "#select" );
+			var times = $( "#times" );
+			var work = $( "#work" );
+
+			var tr = work.parent().parent();
+			var newTr = tr.clone(true);
+
+			select.removeAttr('id');
+			//select.attr('required', 'required');
+			times.removeAttr('id');
+			//times.attr('required', 'required');
+			work.removeAttr('id');
+			
+			tbody.append(newTr);
+
+		    $(field).removeAttr('onBlur');
+	    }
+	}
+	</script>
+{% endblock %}

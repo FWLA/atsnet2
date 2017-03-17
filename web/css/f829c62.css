@@ -1,0 +1,39 @@
+/*
+ * author: Benjamin Ihrig
+ * system: ATS.net 2
+ * bundle: AtemschutzNachweisBundle
+ */
+
+#report li {
+	list-style: none;
+}
+
+#report ul {
+	margin: 0;
+	padding: 0;
+}
+
+#report td {
+	vertical-align: top;
+}
+
+#report .count {
+	text-align: center;
+}
+
+#report th.untauglich, #report td.untauglich {
+	background-color: #ff7777;
+}
+
+#report th.tauglich, #report td.tauglich {
+	background-color: #70ff70;
+}
+
+#report a, #report a:ACTIVE, #report a:VISITED {
+	color: #000000;
+	text-decoration: none;
+}
+
+#report a:HOVER {
+	text-decoration: underline;
+}

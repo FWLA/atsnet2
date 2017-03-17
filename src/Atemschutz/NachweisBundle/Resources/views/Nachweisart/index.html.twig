@@ -1,0 +1,72 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Nachweisart:base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutzcore/css/tablesorter/style.css'
+		filter='cssrewrite'
+	%}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}Übersicht{% endblock %}
+
+{% block moduleBody %}
+
+{% if nachweisarts|length == 0 %}
+<em>Keine Nachweisarten angelegt.</em>
+{% else %}
+<table id="nachweisart_table" class="tablesorter">
+	<thead>
+		<tr>
+			<th>Name<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Vorraussetzung<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Gültigkeit<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>
+	<tbody>
+		{% for nachweisart in nachweisarts %}
+		<tr>
+			<td>{{ nachweisart.getName() }}
+			<td>{{ nachweisart.getRequiredForTitle() }}
+			<td>{{ nachweisart.getTimeValid() }}
+			<td>
+				<ul class="action_menu">
+					<li>
+						<a href="#">
+							<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/gear.png') }}" alt="Optionen" />
+							<div class="clear"></div>
+						</a>
+					<ul>
+						<li>
+							<a href="{{ path('nachweisart_edit', {'id': nachweisart.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/edit.png') }}" alt="Bearbeiten" />
+								<div class="clear"></div>
+							</a>
+						<li>
+							<a class="delete" href="{{ path('nachweisart_delete', {'id': nachweisart.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Löschen" />
+								<div class="clear"></div>
+							</a>
+					</ul>
+				</ul>
+		{% endfor %}
+</table>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts
+		'bundles/atemschutzcore/js/jquery.tablesorter.min.js'
+		'bundles/atemschutznachweis/js/nachweisart.index.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}

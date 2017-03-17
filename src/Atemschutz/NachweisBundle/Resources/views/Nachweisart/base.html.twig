@@ -1,0 +1,29 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzCoreBundle::base.html.twig' %}
+
+{% block title %}{{ parent() }} - Nachweisart{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block bundleBody %}
+<h2>Nachweisarten</h2>
+
+<h3>{% block moduleTitle %}{% endblock %}</h3>
+
+{% block moduleActions %}
+<ul class="inline">
+	<li><a href="{{ path('nachweisart_new') }}">Neue Nachweisart</a>
+</ul>
+{% endblock %}
+
+{% block moduleBody %}{% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+{% endblock %}

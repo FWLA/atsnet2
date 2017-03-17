@@ -1,0 +1,35 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzCoreBundle #}
+
+{% extends 'AtemschutzCoreBundle::base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutzcore/css/security.login.css'
+		filter='cssrewrite'
+	%}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block bundleBody %}
+
+<h1>Anmeldung</h1>
+
+<form id="login_form" action="{{ path('login_check') }}" method="post">
+	<table>
+		<tr>
+			<th><label for="username">Email:</label>
+			<td><input type="email" id="username" name="_username" value="{{ last_username }}" />
+		<tr>
+			<th><label for="password">Passwort:</label>
+			<td><input type="password" id="password" name="_password" />
+		<tr>
+			<th><label for="remember_me">Angemeldet bleiben:</label>
+			<td><input type="checkbox" id="remember_me" name="_remember_me" />
+	</table>
+    <input type="submit" value="Anmelden" />
+</form>
+{% endblock %}

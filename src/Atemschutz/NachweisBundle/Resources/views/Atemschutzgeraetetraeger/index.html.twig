@@ -1,0 +1,106 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Atemschutzgeraetetraeger:base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutzcore/css/tablesorter/style.css'
+		filter='cssrewrite'
+	%}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}Übersicht{% endblock %}
+
+{% block moduleActions %}
+{% if is_granted('ROLE_NACHWEIS_MANAGER') %}
+<ul class="inline">
+	<li><a href="{{ path('atemschutzgeraetetraeger_new') }}">Neuer Atemschutzgeräteträger</a>
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block moduleBody %}
+
+{% if atemschutzgeraetetraegers|length == 0 %}
+<em>Keine Atemschutzgeräteträger angelegt.</em>
+{% else %}
+<table id="atsgt_table" class="tablesorter">
+	<thead>
+		<tr>
+			<th>Nachname<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Vorname<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Geburtstag<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Organisation<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Aktiv
+			<th>
+	<tbody>
+		{% for atemschutzgeraetetraeger in atemschutzgeraetetraegers %}
+		<tr>
+			<td>{{ atemschutzgeraetetraeger.getLastname() }}
+			<td>{{ atemschutzgeraetetraeger.getFirstname() }}
+			<td>{{ atemschutzgeraetetraeger.getBirthdateFormatted() }}
+			<td>{{ atemschutzgeraetetraeger.getOrganisation() }}
+			<td>
+				<ul class="action_menu">
+					<li><a class="status" href="{{ path('atemschutzgeraetetraeger_status', {'id': atemschutzgeraetetraeger.getId()}) }}">
+						{% if atemschutzgeraetetraeger.getIsActive() == true %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/tick.png') }}" alt="Ja" />
+						{% else %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Nein" />
+						{% endif %}
+						<div class="clear"></div>
+						</a>
+				</ul>	
+			<td>
+				<ul class="action_menu">
+					<li>
+						<a href="#">
+							<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/gear.png') }}" alt="Optionen" />
+							<div class="clear"></div>
+						</a>
+					<ul>
+						<li>
+							<a href="{{ path('atemschutzgeraetetraeger_show', {'id': atemschutzgeraetetraeger.getId(), '_format': 'html'}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/search.png') }}" alt="Details" />
+								<div class="clear"></div>
+							</a>
+						<li>
+							<a href="{{ path('atemschutzgeraetetraeger_show', {'id': atemschutzgeraetetraeger.getId(), '_format': 'pdf'}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/pdf.png') }}" alt="Details" />
+								<div class="clear"></div>
+							</a>
+						<li>
+							<a href="{{ path('atemschutzgeraetetraeger_edit', {'id': atemschutzgeraetetraeger.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/edit.png') }}" alt="Bearbeiten" />
+								<div class="clear"></div>
+							</a>
+						{% if is_granted('ROLE_NACHWEIS_ADMIN') %}
+						<li>
+							<a class="delete_confirm" href="{{ path('atemschutzgeraetetraeger_delete', {'id': atemschutzgeraetetraeger.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Löschen" />
+								<div class="clear"></div>
+							</a>
+						{% endif %}
+					</ul>
+				</ul>
+		{% endfor %}
+</table>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts
+		'bundles/atemschutzcore/js/jquery.tablesorter.min.js'
+		'bundles/atemschutznachweis/js/atemschutzgeraetetraeger.index.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}

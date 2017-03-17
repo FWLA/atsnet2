@@ -1,0 +1,41 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% extends 'AtemschutzNachweisBundle:Atemschutzgeraetetraeger:base.html.twig' %}
+
+{% block title %}{{ parent() }} - Neu{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+{% endblock %}
+
+{% block moduleTitle %}Neuer Atemschutzgeräteträger{% endblock %}
+
+{% block moduleActions %}
+<ul class="inline">
+	<li><a href="{{ path('atemschutzgeraetetraeger_index') }}">Abbrechen</a>
+</ul>
+{% endblock %}
+
+{% block moduleBody %}
+{% include 'AtemschutzNachweisBundle:Atemschutzgeraetetraeger:form.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript">
+	$(function() {
+		$( ".date" ).datepicker({
+			dateFormat: 'dd.mm.yy',
+			showOn: "both",
+			changeMonth: true,
+			changeYear: true,
+			buttonImage: "{{ asset('bundles/atemschutzcore/images/icons/16x16/calendar.png') }}",
+			buttonImageOnly: true,
+			showOtherMonths: true,
+			selectOtherMonths: true
+		});
+	});
+	</script>
+{% endblock %}

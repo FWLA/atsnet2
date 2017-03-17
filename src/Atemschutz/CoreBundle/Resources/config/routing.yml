@@ -1,0 +1,23 @@
+# author: Benjamin Ihrig
+# system: ATS.net 2
+# bundle: AtemschutzCoreBundle
+
+default:
+  resource: "@AtemschutzCoreBundle/Controller/DefaultController.php"
+  prefix: /
+  type: annotation
+
+standort:
+  resource: "@AtemschutzCoreBundle/Controller/OrganisationController.php"
+  prefix: /core/organisation
+  type: annotation
+  
+user:
+  resource: "@AtemschutzCoreBundle/Controller/UserController.php"
+  prefix: /core/user
+  type: annotation
+  
+myaccount:
+  resource: "@AtemschutzCoreBundle/Controller/MyAccountController.php"
+  prefix: /core/account
+  type: annotation

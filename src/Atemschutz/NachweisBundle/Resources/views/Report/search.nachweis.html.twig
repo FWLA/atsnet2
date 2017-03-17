@@ -1,0 +1,11 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzNachweisBundle #}
+
+{% form_theme form 'AtemschutzCoreBundle:Form:fields.html.twig' %}
+
+<form action="{{ path('report_search_nachweis') }}" method="post" {{ form_enctype(form) }}>
+	<table>
+	{{ form_widget(form) }}
+	</table>
+</form>

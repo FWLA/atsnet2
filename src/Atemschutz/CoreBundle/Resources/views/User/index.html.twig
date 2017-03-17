@@ -1,0 +1,107 @@
+{# author: Benjamin Ihrig #}
+{# system: ATS.net 2 #}
+{# bundle: AtemschutzCoreBundle #}
+
+{% extends 'AtemschutzCoreBundle:User:base.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets
+		'bundles/atemschutzcore/css/tablesorter/style.css'
+		'bundles/atemschutzcore/css/user.index.css'
+		filter='cssrewrite'
+	%}
+		<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block moduleTitle %}Übersicht{% endblock %}
+
+{% block moduleBody %}
+
+{% if users|length == 0 %}
+<em>Keine Benutzer angelegt.</em>
+{% else %}
+<table id="user_table" class="tablesorter">
+	<thead>
+		<tr>
+			<th>Nachname<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Vorname<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Email<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Organisation<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Rollen<img src="{{ asset('bundles/atemschutzcore/images/sortable_blank.png') }}" />
+			<th>Aktiv
+			<th>
+	<tbody>
+		{% for user in users %}
+		<tr>
+			<td>{{ user.getLastname() }}
+			<td>{{ user.getFirstname() }}
+			<td>{{ user.getEmail() }}
+			<td>{{ user.getOrganisation() }}
+			<td>{% if user.getNamedRoles()|length == 1 %}
+					{% for role in user.getNamedRoles %}
+					{{ role }}
+					{% endfor %}
+				{% else %}
+					<span class="roles" title="<ul>{% for role in user.getNamedRoles() %}<li>{{ role }}</li>{% endfor %}</ul>">Mehrere Rollen</span>
+				{% endif %}
+			<td>
+				{% if app.user.isAllowedToEdit(user) %}
+				<ul class="action_menu">
+					<li><a href="{{ path('user_status', {'id': user.getId()}) }}">
+						{% if user.getIsActive() == true %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/tick.png') }}" alt="Ja" />
+						{% else %}
+						<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Nein" />
+						{% endif %}
+						<div class="clear"></div>
+						</a>
+				</ul>
+				{% else %}
+					{% if user.getIsActive() == true %}
+					<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/tick.png') }}" alt="Ja" />
+					{% else %}
+					<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Nein" />
+					{% endif %}
+				{% endif %}
+			<td>
+				{% if app.user.isAllowedToEdit(user) %}
+				<ul class="action_menu">
+					<li>
+						<a href="#">
+							<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/gear.png') }}" alt="Optionen" />
+							<div class="clear"></div>
+						</a>
+					<ul>
+						<li>
+							<a href="{{ path('user_edit', {'id': user.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/edit.png') }}" alt="Bearbeiten" />
+								<div class="clear"></div>
+							</a>
+						{% if is_granted('ROLE_CORE_ADMIN') %}
+						<li>
+							<a class="delete" href="{{ path('user_delete', {'id': user.getId()}) }}">
+								<img src="{{ asset('bundles/atemschutzcore/images/icons/16x16/delete.png') }}" alt="Löschen" />
+								<div class="clear"></div>
+							</a>
+						{% endif %}
+					</ul>
+				</ul>
+				{% endif %}
+		{% endfor %}
+</table>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts
+		'bundles/atemschutzcore/js/jquery.tablesorter.min.js'
+		'bundles/atemschutzcore/js/user.index.js'
+	%}
+	<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}
